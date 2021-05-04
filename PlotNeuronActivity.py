@@ -13,21 +13,21 @@ from nengo.utils.ensemble import tuning_curves
 def create_model(size):
     names = ["One Neuron", "Two Neurons"]
     encoders = [[[1]], [[1], [-1]]]
-    model_ = nengo.Network(label=names[size - 1])
-    with model_:
-        neurons_ = nengo.Ensemble(size, dimensions=1, intercepts=Uniform(-0.5, -0.5), max_rates=Uniform(100, 100),
+    model = nengo.Network(label=names[size - 1])
+    with model:
+        neurons = nengo.Ensemble(size, dimensions=1, intercepts=Uniform(-0.5, -0.5), max_rates=Uniform(100, 100),
                                   encoders=encoders[size - 1])
-        cos_ = nengo.Node(lambda t: np.cos(8 * t))
+        cos = nengo.Node(lambda t: np.cos(8 * t))
         # Connect the input signal to the neuron
-        nengo.Connection(cos_, neurons_)
+        nengo.Connection(cos, neurons)
         # The original input
-        cos_probe_ = nengo.Probe(cos_)
+        cos_probe_ = nengo.Probe(cos)
         # The raw spikes from the neuron
-        spikes_ = nengo.Probe(neurons_.neurons)
+        spikes = nengo.Probe(neurons.neurons)
         # Spikes filtered by a 10ms post-synaptic filter
-        filtered_ = nengo.Probe(neurons_, synapse=0.01)
+        filtered = nengo.Probe(neurons, synapse=0.01)
 
-    return model_, neurons_, cos_probe_, spikes_, filtered_
+    return model, neurons, cos_probe_, spikes, filtered
 
 
 def plot(model, neurons, cos_probe, spikes, filtered):
