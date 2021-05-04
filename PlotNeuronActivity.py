@@ -1,6 +1,8 @@
 # following code was written using tutorials on https://www.nengo.ai/nengo/examples/basic/single-neuron.html and
 # https://www.nengo.ai/nengo/examples/usage/tuning-curves.html
 # and information retrieved from https://www.w3schools.com/python/matplotlib_pyplot.asp
+import getopt
+import sys
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -23,7 +25,8 @@ def create_model(size, random_tuning_curves):
         if random_tuning_curves:
             neurons = nengo.Ensemble(size, dimensions=1)
         else:
-            neurons = nengo.Ensemble(size, dimensions=1, intercepts=Uniform(-0.5, -0.5), max_rates=Uniform(100, 100), encoders=encoders[index])
+            neurons = nengo.Ensemble(size, dimensions=1, intercepts=Uniform(-0.5, -0.5), max_rates=Uniform(100, 100),
+                                     encoders=encoders[index])
 
         cos = nengo.Node(lambda t: np.cos(8 * t))
         # Connect the input signal to the neuron
@@ -69,6 +72,14 @@ def main():
     plot(model, neurons, cos_probe, spikes, filtered)
 
 
-AMOUNT_OF_NEURONS = 10
+AMOUNT_OF_NEURONS = 0
 RANDOM_TUNING_CURVES = True
+try:
+    opts, args = getopt.getopt(sys.argv[1:], "n:", ["neurons="])
+except getopt.GetoptError:
+    print('argument: -n <number_of_neurons>')
+    sys.exit(2)
+for opt, arg in opts:
+    if opt in ("-n", "--neurons"):
+        AMOUNT_OF_NEURONS = int(arg)
 main()
