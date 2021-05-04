@@ -10,13 +10,21 @@ from nengo.dists import Uniform
 from nengo.utils.ensemble import tuning_curves
 
 
-def create_model(size):
-    names = ["One Neuron", "Two Neurons"]
-    encoders = [[[1]], [[1], [-1]]]
-    model = nengo.Network(label=names[size - 1])
+def create_model(size, random_tuning_curves):
+    names = ["One Neuron", "Two Neurons", "N Neurons"]
+    encoders = [[[1]], [[1], [-1]], [[1], [-1]]]
+    if size >= len(names):
+        index = len(names) - 1
+    else:
+        index = size - 1
+
+    model = nengo.Network(label=names[index])
     with model:
-        neurons = nengo.Ensemble(size, dimensions=1, intercepts=Uniform(-0.5, -0.5), max_rates=Uniform(100, 100),
-                                  encoders=encoders[size - 1])
+        if random_tuning_curves:
+            neurons = nengo.Ensemble(size, dimensions=1)
+        else:
+            neurons = nengo.Ensemble(size, dimensions=1, intercepts=Uniform(-0.5, -0.5), max_rates=Uniform(100, 100), encoders=encoders[index])
+
         cos = nengo.Node(lambda t: np.cos(8 * t))
         # Connect the input signal to the neuron
         nengo.Connection(cos, neurons)
@@ -57,9 +65,10 @@ def plot(model, neurons, cos_probe, spikes, filtered):
 
 
 def main():
-    model, neurons, cos_probe, spikes, filtered = create_model(AMOUNT_OF_NEURONS)
+    model, neurons, cos_probe, spikes, filtered = create_model(AMOUNT_OF_NEURONS, RANDOM_TUNING_CURVES)
     plot(model, neurons, cos_probe, spikes, filtered)
 
 
-AMOUNT_OF_NEURONS = 2
+AMOUNT_OF_NEURONS = 50
+RANDOM_TUNING_CURVES = True
 main()
