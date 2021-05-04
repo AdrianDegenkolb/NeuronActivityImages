@@ -74,12 +74,21 @@ def main():
 
 AMOUNT_OF_NEURONS = 0
 RANDOM_TUNING_CURVES = True
+
+
+def error():
+    print('argument: -n <number_of_neurons>')
+    sys.exit(2)
+
+
 try:
     opts, args = getopt.getopt(sys.argv[1:], "n:", ["neurons="])
 except getopt.GetoptError:
-    print('argument: -n <number_of_neurons>')
-    sys.exit(2)
+    error()
 for opt, arg in opts:
     if opt in ("-n", "--neurons"):
-        AMOUNT_OF_NEURONS = int(arg)
+        try:
+            AMOUNT_OF_NEURONS = int(arg)
+        except ValueError:
+            error()
 main()
