@@ -1,13 +1,13 @@
-# following code was written using a tutorial on https://www.nengo.ai/nengo/examples/basic/single-neuron.html
+# following code was written using tutorials on https://www.nengo.ai/nengo/examples/basic/single-neuron.html and
+# https://www.nengo.ai/nengo/examples/usage/tuning-curves.html
 # and information retrieved from https://www.w3schools.com/python/matplotlib_pyplot.asp
 
 import matplotlib.pyplot as plt
 import numpy as np
-
 import nengo
 from nengo.utils.matplotlib import rasterplot
-
 from nengo.dists import Uniform
+from nengo.utils.ensemble import tuning_curves
 
 model = nengo.Network(label="One Neuron")
 with model:
@@ -24,7 +24,15 @@ with model:
 
 # run the simulation for one second
 with nengo.Simulator(model) as sim:
+    eval_points, activities = tuning_curves(neurons, sim)
     sim.run(1)
+
+plt.figure()
+plt.plot(eval_points, activities)
+# We could have alternatively shortened this to
+# plt.plot(*tuning_curves(ens_1d, sim))
+plt.ylabel("Firing rate (Hz)")
+plt.xlabel("Input scalar, x")
 
 # Plot the decoded output of the ensemble
 plt.figure()
