@@ -48,8 +48,7 @@ def plot(model, neurons, cos_probe, spikes, filtered):
     plt.xlabel("Time")
     plt.xlim(0, 1)
     # Plot the spiking output of the ensemble
-    plt.figure(figsize=(10, 8))
-    plt.subplot(221)
+    plt.figure()
     rasterplot(sim.trange(), sim.data[spikes])
     plt.ylabel("Neuron")
     plt.xlabel("Time of Spike-Occurrence")
@@ -62,5 +61,5 @@ def main():
     plot(model, neurons, cos_probe, spikes, filtered)
 
 
-AMOUNT_OF_NEURONS = 1
+AMOUNT_OF_NEURONS = 2
 main()
