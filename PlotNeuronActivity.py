@@ -69,6 +69,6 @@ def main():
     plot(model, neurons, cos_probe, spikes, filtered)
 
 
-AMOUNT_OF_NEURONS = 50
+AMOUNT_OF_NEURONS = 5000
 RANDOM_TUNING_CURVES = True
 main()
